@@ -4,10 +4,10 @@ import * as team from "./team"; */
 import * as user from "./user";
 
 export const schema = {
-   /*   ...invitation,
+  /*   ...invitation,
   ...organization,
   ...team, */
-   ...user,
+  ...user,
 } as const;
 
 export type DbSchema = typeof schema;

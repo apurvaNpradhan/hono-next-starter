@@ -8,11 +8,11 @@ Our core stack includes [tRPC](https://trpc.io/) for end-to-end type safety, [Be
 
 ### Why tRPC?
 
--  **End-to-end type safety**: Your API contracts are enforced at compile time, not runtime surprises
--  **No code generation**: Unlike GraphQL, there's no build step to mess up your CI/CD pipeline
--  **Auto-completion everywhere**: Your IDE knows what methods exist before you do
--  **Lightweight**: Ships almost no runtime code to your client bundle
--  **Edge-ready**: Works perfectly with Cloudflare Workers and other edge runtimes
+- **End-to-end type safety**: Your API contracts are enforced at compile time, not runtime surprises
+- **No code generation**: Unlike GraphQL, there's no build step to mess up your CI/CD pipeline
+- **Auto-completion everywhere**: Your IDE knows what methods exist before you do
+- **Lightweight**: Ships almost no runtime code to your client bundle
+- **Edge-ready**: Works perfectly with Cloudflare Workers and other edge runtimes
 
 ## Project Structure
 
@@ -48,14 +48,14 @@ Every API call gets a rich context object containing:
 
 ```typescript
 type TRPCContext = {
-   req: Request; // Original HTTP request
-   info: CreateHTTPContextOptions["info"]; // Request metadata
-   db: ReturnType<typeof drizzle>; // Database connection
-   session: Session | null; // User session (if authenticated)
-   cache: Map<string | symbol, unknown>; // Request-scoped cache
-   res?: Response; // Optional response object for Hono
-   resHeaders?: Headers; // Optional headers for Hono
-   env?: CloudflareEnv; // Environment variables for Cloudflare
+  req: Request; // Original HTTP request
+  info: CreateHTTPContextOptions["info"]; // Request metadata
+  db: ReturnType<typeof drizzle>; // Database connection
+  session: Session | null; // User session (if authenticated)
+  cache: Map<string | symbol, unknown>; // Request-scoped cache
+  res?: Response; // Optional response object for Hono
+  resHeaders?: Headers; // Optional headers for Hono
+  env?: CloudflareEnv; // Environment variables for Cloudflare
 };
 ```
 
@@ -63,9 +63,9 @@ type TRPCContext = {
 
 We use [DataLoader](https://github.com/graphql/dataloader) to solve the N+1 query problem and provide intelligent caching:
 
--  **Batch loading**: Multiple requests for the same resource type get batched
--  **Request-scoped caching**: Prevents duplicate queries within a single request
--  **Type-safe loaders**: Each loader is typed for specific database entities
+- **Batch loading**: Multiple requests for the same resource type get batched
+- **Request-scoped caching**: Prevents duplicate queries within a single request
+- **Type-safe loaders**: Each loader is typed for specific database entities
 
 ## Router Architecture
 
@@ -75,9 +75,9 @@ The main router combines all feature-specific routers:
 
 ```typescript
 export const mainRouter = router({
-   app: appRouter, // Application metadata, health checks
-   user: userRouter, // User profile management
-   organization: organizationRouter, // Multi-tenant features
+  app: appRouter, // Application metadata, health checks
+  user: userRouter, // User profile management
+  organization: organizationRouter, // Multi-tenant features
 });
 ```
 
@@ -87,22 +87,22 @@ Each domain gets its own router for better organization:
 
 #### User Router (`routers/user.ts`)
 
--  `me`: Get current user profile
--  `updateProfile`: Update user information
--  `list`: Paginated user listing (admin only)
+- `me`: Get current user profile
+- `updateProfile`: Update user information
+- `list`: Paginated user listing (admin only)
 
 #### Organization Router (`routers/organization.ts`)
 
--  Multi-tenant SaaS features
--  Member management
--  Role-based access control
--  Invitation system
+- Multi-tenant SaaS features
+- Member management
+- Role-based access control
+- Invitation system
 
 #### App Router (`routers/app.ts`)
 
--  Health checks and status endpoints
--  Application metadata
--  Public configuration data
+- Health checks and status endpoints
+- Application metadata
+- Public configuration data
 
 ## Development Workflow
 
@@ -130,17 +130,17 @@ bun --filter api test --watch
 
    ```typescript
    export const myRouter = router({
-      myEndpoint: protectedProcedure
-         .input(
-            z.object({
-               name: z.string().min(1),
-               optional: z.number().optional(),
-            })
-         )
-         .mutation(async ({ input, ctx }) => {
-            // Your business logic here
-            return { success: true };
-         }),
+     myEndpoint: protectedProcedure
+       .input(
+         z.object({
+           name: z.string().min(1),
+           optional: z.number().optional(),
+         })
+       )
+       .mutation(async ({ input, ctx }) => {
+         // Your business logic here
+         return { success: true };
+       }),
    });
    ```
 
@@ -148,8 +148,8 @@ bun --filter api test --watch
 
    ```typescript
    export const mainRouter = router({
-      // ... existing routers
-      myFeature: myRouter,
+     // ... existing routers
+     myFeature: myRouter,
    });
    ```
 
@@ -180,21 +180,21 @@ import { TRPCError } from "@trpc/server";
 
 // In your procedure
 if (!user) {
-   throw new TRPCError({
-      code: "NOT_FOUND",
-      message: "User not found",
-      cause: originalError, // Optional: include original error
-   });
+  throw new TRPCError({
+    code: "NOT_FOUND",
+    message: "User not found",
+    cause: originalError, // Optional: include original error
+  });
 }
 ```
 
 Common error codes:
 
--  `BAD_REQUEST`: Invalid input or malformed request
--  `UNAUTHORIZED`: Authentication required
--  `FORBIDDEN`: Insufficient permissions
--  `NOT_FOUND`: Resource doesn't exist
--  `INTERNAL_SERVER_ERROR`: Something went wrong on our end
+- `BAD_REQUEST`: Invalid input or malformed request
+- `UNAUTHORIZED`: Authentication required
+- `FORBIDDEN`: Insufficient permissions
+- `NOT_FOUND`: Resource doesn't exist
+- `INTERNAL_SERVER_ERROR`: Something went wrong on our end
 
 ## Authentication Integration
 
@@ -206,7 +206,7 @@ Our authentication system integrates seamlessly with tRPC through the context:
 // In a protected procedure
 const { session } = ctx;
 if (!session) {
-   throw new TRPCError({ code: "UNAUTHORIZED" });
+  throw new TRPCError({ code: "UNAUTHORIZED" });
 }
 
 const userId = session.userId; // Type-safe user ID
@@ -237,7 +237,7 @@ The context includes a cache Map for storing expensive computations:
 ```typescript
 const cacheKey = `expensive-calculation-${input.id}`;
 if (ctx.cache.has(cacheKey)) {
-   return ctx.cache.get(cacheKey);
+  return ctx.cache.get(cacheKey);
 }
 
 const result = await expensiveOperation(input);
@@ -251,10 +251,10 @@ return result;
 
 The API is designed to run on Cloudflare Workers with zero configuration:
 
--  **Edge deployment**: API runs close to your users globally
--  **Neon PostgreSQL database**: Integrated with our Drizzle ORM setup
--  **Environment variables**: Managed through Cloudflare dashboard
--  **Request context**: Includes Cloudflare-specific environment and bindings
+- **Edge deployment**: API runs close to your users globally
+- **Neon PostgreSQL database**: Integrated with our Drizzle ORM setup
+- **Environment variables**: Managed through Cloudflare dashboard
+- **Request context**: Includes Cloudflare-specific environment and bindings
 
 ### Type Exports
 
@@ -263,16 +263,17 @@ The API package exports all necessary types for frontend integration:
 ```typescript
 // Frontend usage
 import type { AppRouter } from "@repo/api";
+
 import { createTRPCClient } from "@trpc/client";
 
 const client = createTRPCClient<AppRouter>({
-   // ... configuration
+  // ... configuration
 });
 
 // Fully typed API calls
 const user = await client.user.me.query();
 const updated = await client.user.updateProfile.mutate({
-   name: "New Name",
+  name: "New Name",
 });
 ```
 
@@ -284,18 +285,19 @@ Each router should have corresponding tests:
 
 ```typescript
 // tests/user.test.ts
-import { describe, it, expect } from "vitest";
-import { createMockContext } from "./helpers";
+import { describe, expect, it } from "vitest";
+
 import { userRouter } from "../routers/user";
+import { createMockContext } from "./helpers";
 
 describe("userRouter", () => {
-   it("should return current user profile", async () => {
-      const ctx = createMockContext({ userId: "123" });
-      const caller = userRouter.createCaller(ctx);
+  it("should return current user profile", async () => {
+    const ctx = createMockContext({ userId: "123" });
+    const caller = userRouter.createCaller(ctx);
 
-      const result = await caller.me();
-      expect(result.id).toBe("123");
-   });
+    const result = await caller.me();
+    expect(result.id).toBe("123");
+  });
 });
 ```
 
@@ -317,15 +319,15 @@ If you're getting type errors after adding new endpoints:
 
 Common issues and solutions:
 
--  **"Context not found"**: Make sure your middleware is properly configured
--  **"Procedure not found"**: Check that your router is added to the main router
--  **Database connection errors**: Verify your Neon database is set up and accessible
+- **"Context not found"**: Make sure your middleware is properly configured
+- **"Procedure not found"**: Check that your router is added to the main router
+- **Database connection errors**: Verify your Neon database is set up and accessible
 
 ### Performance Issues
 
--  **Slow queries**: Check if you're using DataLoaders properly
--  **Memory leaks**: Ensure you're not storing large objects in the request cache
--  **High latency**: Consider adding more aggressive caching strategies
+- **Slow queries**: Check if you're using DataLoaders properly
+- **Memory leaks**: Ensure you're not storing large objects in the request cache
+- **High latency**: Consider adding more aggressive caching strategies
 
 ## Best Practices
 
@@ -357,12 +359,12 @@ Common issues and solutions:
 Thanks to our package.json exports, you can import API components cleanly:
 
 ```typescript
-// Import the main router and types
-import { appRouter, type AppRouter } from "@repo/api";
-
+import type { AppRouter } from "@repo/api";
 // Import specific utilities
-import { type TRPCContext } from "@repo/api";
+import type { TRPCContext } from "@repo/api";
 
+// Import the main router and types
+import { appRouter } from "@repo/api";
 // Import Hono integration
 import { createHonoHandler } from "@repo/api/hono";
 ```
@@ -375,13 +377,13 @@ Create reusable middleware for common patterns:
 
 ```typescript
 const auditMiddleware = t.middleware(async ({ ctx, next }) => {
-   const start = Date.now();
-   const result = await next();
+  const start = Date.now();
+  const result = await next();
 
-   // Log API usage for analytics
-   console.log(`${ctx.req.method} ${ctx.req.url} - ${Date.now() - start}ms`);
+  // Log API usage for analytics
+  console.log(`${ctx.req.method} ${ctx.req.url} - ${Date.now() - start}ms`);
 
-   return result;
+  return result;
 });
 
 export const auditedProcedure = publicProcedure.use(auditMiddleware);
@@ -414,11 +416,11 @@ Remember: A well-designed API is like a good joke  if you have to explain it, i
 
 ## Resources
 
--  [tRPC Documentation](https://trpc.io/docs)
--  [Better Auth Documentation](https://www.better-auth.com/docs)
--  [Zod Documentation](https://zod.dev/)
--  [DataLoader Documentation](https://github.com/graphql/dataloader)
--  [Cloudflare Workers Documentation](https://developers.cloudflare.com/workers/)
+- [tRPC Documentation](https://trpc.io/docs)
+- [Better Auth Documentation](https://www.better-auth.com/docs)
+- [Zod Documentation](https://zod.dev/)
+- [DataLoader Documentation](https://github.com/graphql/dataloader)
+- [Cloudflare Workers Documentation](https://developers.cloudflare.com/workers/)
 
 ---
 

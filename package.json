@@ -13,6 +13,7 @@
 	"scripts": {
 		"dev": "turbo dev",
 		"build": "turbo build",
+		"lint": "turbo lint",
 		"check-types": "turbo check-types",
 		"dev:native": "turbo -F native dev",
 		"dev:web": "turbo -F web dev",
@@ -22,11 +23,20 @@
 		"ui:add": "bun --filter @repo/ui ui:add",
 		"ui:list": "bun --filter @repo/ui ui:list",
 		"ui:update": "bun --filter @repo/ui ui:update",
-		"ui:essentials": "bun --filter @repo/ui ui:essentials"
+		"ui:essentials": "bun --filter @repo/ui ui:essentials",
+		"prepare": "husky"
 	},
 	"dependencies": {},
 	"devDependencies": {
+		"husky": "^9.1.7",
+		"lint-staged": "^16.1.5",
 		"turbo": "^2.5.4"
 	},
-	"packageManager": "bun@1.2.20"
+	"packageManager": "bun@1.2.20",
+	"lint-staged": {
+		"*.{js,jsx,ts,tsx}": [
+			"eslint --fix"
+		]
+	}
+
 }

@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+/* eslint-disable node/prefer-global/process */
 
 /**
  * PostgreSQL database export utility with schema/data options
@@ -26,9 +27,9 @@
  */
 
 import { $ } from "bun";
-import { existsSync } from "fs";
-import { chmod, mkdir } from "fs/promises";
-import { resolve } from "path";
+import { existsSync } from "node:fs";
+import { chmod, mkdir } from "node:fs/promises";
+import { resolve } from "node:path";
 
 // Import drizzle config to trigger environment loading and validation
 import "../drizzle.config";
@@ -43,19 +44,21 @@ let table: string | undefined;
 // Find pass-through arguments (after --)
 const dashIndex = args.indexOf("--");
 if (dashIndex !== -1) {
-   passThrough.push(...args.slice(dashIndex + 1));
-   args.splice(dashIndex);
+  passThrough.push(...args.slice(dashIndex + 1));
+  args.splice(dashIndex);
 }
 
 // Parse named arguments
 for (const arg of args) {
-   if (arg === "--data") {
-      includeData = true;
-   } else if (arg === "--data-only") {
-      dataOnly = true;
-   } else if (arg.startsWith("--table=")) {
-      table = arg.split("=")[1];
-   }
+  if (arg === "--data") {
+    includeData = true;
+  }
+  else if (arg === "--data-only") {
+    dataOnly = true;
+  }
+  else if (arg.startsWith("--table=")) {
+    table = arg.split("=")[1];
+  }
 }
 
 // Build pg_dump command
@@ -70,14 +73,15 @@ pgDumpArgs.push("--format=plain", "--encoding=UTF-8");
 
 // Handle export type
 if (dataOnly) {
-   pgDumpArgs.push("--data-only");
-} else if (!includeData) {
-   pgDumpArgs.push("--schema-only");
+  pgDumpArgs.push("--data-only");
+}
+else if (!includeData) {
+  pgDumpArgs.push("--schema-only");
 }
 
 // Handle table selection
 if (table) {
-   pgDumpArgs.push(`--table=${table}`);
+  pgDumpArgs.push(`--table=${table}`);
 }
 
 // Add pass-through arguments
@@ -92,38 +96,40 @@ const tableSuffix = table ? `-${table}` : "";
 // Ensure backups directory exists
 const backupsDir = resolve("./backups");
 if (!existsSync(backupsDir)) {
-   await mkdir(backupsDir, { recursive: true });
-   console.log(`📁 Created backups directory: ${backupsDir}`);
+  await mkdir(backupsDir, { recursive: true });
+  console.log(`📁 Created backups directory: ${backupsDir}`);
 }
 
 const outputPath = resolve(
-   backupsDir,
-   `dump${envSuffix}${typeSuffix}${tableSuffix}-${timestamp}.sql`
+  backupsDir,
+  `dump${envSuffix}${typeSuffix}${tableSuffix}-${timestamp}.sql`,
 );
 
 pgDumpArgs.push(`--file=${outputPath}`);
 
 // Check if pg_dump is available
 try {
-   await $`which pg_dump`.quiet();
-} catch {
-   console.error("❌ pg_dump not found. Please install PostgreSQL client tools.");
-   process.exit(1);
+  await $`which pg_dump`.quiet();
+}
+catch {
+  console.error("❌ pg_dump not found. Please install PostgreSQL client tools.");
+  process.exit(1);
 }
 
 console.log("📤 Exporting database...");
 console.log(`📁 Output: ${outputPath}`);
 
 try {
-   // Execute pg_dump
-   await $`pg_dump ${pgDumpArgs}`;
+  // Execute pg_dump
+  await $`pg_dump ${pgDumpArgs}`;
 
-   // Set file permissions to owner-only readable (600)
-   await chmod(outputPath, 0o600);
+  // Set file permissions to owner-only readable (600)
+  await chmod(outputPath, 0o600);
 
-   console.log(`✅ Export completed successfully!`);
-} catch (error) {
-   console.error("❌ Export failed:");
-   console.error(error);
-   process.exit(1);
+  console.log(`✅ Export completed successfully!`);
+}
+catch (error) {
+  console.error("❌ Export failed:");
+  console.error(error);
+  process.exit(1);
 }

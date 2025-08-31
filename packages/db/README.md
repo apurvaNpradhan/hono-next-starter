@@ -172,14 +172,13 @@ Thanks to our package.json exports, you can import schemas cleanly:
 ```typescript
 // Import everything
 import * as Db from "@/db/schema";
-import * as Db from "../db/schema";
-
 // Import specific schemas
-import { user, organization } from "@/db/schema";
-
+import { organization, user } from "@/db/schema";
+import { invite, member } from "@/db/schema/organization";
 // Import individual tables
 import { user } from "@/db/schema/user";
-import { member, invite } from "@/db/schema/organization";
+
+import * as Db from "../db/schema";
 ```
 
 ## Troubleshooting
@@ -237,5 +236,5 @@ Remember: databases are like fine wine or questionable leftovers 🍷 they get b
 
 ---
 
-> _The database is the foundation of your application. Build it well, or spend your weekends debugging it._  
+> _The database is the foundation of your application. Build it well, or spend your weekends debugging it._
 > — 🍶 Ancient Developer Proverb

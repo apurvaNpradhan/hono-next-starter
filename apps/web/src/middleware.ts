@@ -1,19 +1,21 @@
-import { NextRequest, NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+
 import { getSessionCookie } from "better-auth/cookies";
+import { NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
-   const sessionCookie = getSessionCookie(request);
+  const sessionCookie = getSessionCookie(request);
 
-   if (!sessionCookie) {
-      return NextResponse.redirect(new URL("/sign-in", request.url));
-   }
+  if (!sessionCookie) {
+    return NextResponse.redirect(new URL("/sign-in", request.url));
+  }
 
-   return NextResponse.next();
+  return NextResponse.next();
 }
 
 export const config = {
-   matcher: [
-      "/((?!api|_next/static|_next/image|robots.txt|public|images|manifest.json|sw.js|favicon.ico|workbox-*|sign-in|sign-up).*)",
-      "/",
-   ],
+  matcher: [
+    "/((?!api|_next/static|_next/image|robots.txt|public|images|manifest.json|sw.js|favicon.ico|workbox-*|sign-in|sign-up).*)",
+    "/",
+  ],
 };

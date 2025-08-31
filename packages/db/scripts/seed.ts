@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+/* eslint-disable node/prefer-global/process */
 
 /**
  * Database seeding script
@@ -12,9 +13,9 @@
 
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
+
 import schema from "../schema";
 import { seedUsers } from "../seeds/users";
-
 // Import drizzle config to trigger environment loading
 import "../drizzle.config";
 
@@ -24,12 +25,14 @@ const db = drizzle(client, { schema });
 console.log("🌱 Starting database seeding...");
 
 try {
-   await seedUsers(db);
-   console.log("✅ Database seeding completed successfully!");
-} catch (error) {
-   console.error("❌ Database seeding failed:");
-   console.error(error);
-   process.exitCode = 1;
-} finally {
-   await client.end();
+  await seedUsers(db);
+  console.log("✅ Database seeding completed successfully!");
+}
+catch (error) {
+  console.error("❌ Database seeding failed:");
+  console.error(error);
+  process.exitCode = 1;
+}
+finally {
+  await client.end();
 }

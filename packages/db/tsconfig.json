@@ -2,13 +2,13 @@
   "extends": "../typescript-config/node.jsonc",
   "compilerOptions": {
     "composite": true,
-    "declaration": true,
-    "emitDeclarationOnly": true,
-    "outDir": "./dist",
     "types": [
       "bun",
-      "node",
-    ]
+      "node"
+    ],
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "./dist"
   },
   "include": [
     "**/*.ts",

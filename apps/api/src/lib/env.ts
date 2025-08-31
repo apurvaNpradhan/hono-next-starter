@@ -7,11 +7,11 @@ import { z } from "zod";
  * @throws {ZodError} When environment variables don't match the schema
  */
 export const envSchema = z.object({
-   ENVIRONMENT: z.enum(["production", "staging", "preview", "development"]),
-   DATABASE_URL: z.url(),
-   BETTER_AUTH_SECRET: z.string().min(32),
-   BETTER_AUTH_URL: z.url(),
-   CORS_ORIGIN: z.string(),
+  ENVIRONMENT: z.enum(["production", "staging", "preview", "development"]),
+  DATABASE_URL: z.url(),
+  BETTER_AUTH_SECRET: z.string().min(32),
+  BETTER_AUTH_URL: z.url(),
+  CORS_ORIGIN: z.string(),
 });
 
 /**

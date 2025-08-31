@@ -1,8 +1,8 @@
 {
   "name": "@repo/db",
+  "type": "module",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
   "exports": {
     ".": "./index.ts",
     "./schema": "./schema/index.ts",
@@ -10,6 +10,7 @@
   },
   "scripts": {
     "generate": "drizzle-kit generate",
+    "lint": "eslint .",
     "generate:staging": "bun --env ENVIRONMENT=staging drizzle-kit generate",
     "generate:prod": "bun --env ENVIRONMENT=prod drizzle-kit generate",
     "migrate": "drizzle-kit migrate",
@@ -33,6 +34,7 @@
     "drop": "drizzle-kit drop"
   },
   "peerDependencies": {
+    "@repo/eslint-config": "workspace:*",
     "drizzle-orm": "^0.44.5"
   },
   "devDependencies": {
@@ -41,6 +43,9 @@
     "dotenv": "^17.2.1",
     "drizzle-kit": "^0.31.4",
     "drizzle-orm": "^0.44.5",
+    "eslint": "^9.34.0",
+    "eslint-plugin-drizzle": "^0.2.3",
+    "eslint-plugin-format": "^1.0.1",
     "typescript": "~5.9.2"
   }
 }
