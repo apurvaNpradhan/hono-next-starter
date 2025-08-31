@@ -8,13 +8,13 @@
       "dom.iterable",
       "esnext"
     ],
+    "baseUrl": ".",
     "module": "esnext",
     "moduleResolution": "bundler",
     "paths": {
       "@/*": [
         "./src/*"
-      ],
-      "react": ["./node_modules/@types/react"]
+      ]
     },
     "resolveJsonModule": true,
     "allowJs": true,
@@ -23,7 +23,7 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "plugins": [
       {
         "name": "next"
@@ -36,7 +36,7 @@
     }
   ],
   "include": [
-    "../api/worker-configuration.d.ts",
+    "../server/worker-configuration.d.ts",
     "./**/*.ts",
     "./**/*.tsx",
     "./.next/types/**/*.ts",

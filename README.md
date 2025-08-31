@@ -1,1 +1,1 @@
-# Better-T-Stack
+# Nextjs+hono+trpc

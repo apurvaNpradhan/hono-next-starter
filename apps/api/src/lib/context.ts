@@ -1,10 +1,10 @@
 import type { CreateHTTPContextOptions } from "@trpc/server/adapters/standalone";
 import type { Session, User } from "better-auth/types";
-import type { env } from "cloudflare:workers";
 import type { Context as HonoContext } from "hono";
 
 import type { DB } from "../db";
 import type { Auth } from "./auth";
+import type { env } from "./env";
 
 export type TRPCContext = {
   /** The incoming HTTP request object */

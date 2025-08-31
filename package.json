@@ -30,13 +30,12 @@
 	"devDependencies": {
 		"husky": "^9.1.7",
 		"lint-staged": "^16.1.5",
-		"turbo": "^2.5.4"
+		"turbo": "^2.5.6"
 	},
-	"packageManager": "bun@1.2.20",
+	"packageManager": "bun@1.2.21",
 	"lint-staged": {
 		"*.{js,jsx,ts,tsx}": [
 			"eslint --fix"
 		]
 	}
-
 }
