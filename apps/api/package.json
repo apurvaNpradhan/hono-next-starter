@@ -1,0 +1,46 @@
+{
+	"name": "@repo/api",
+	"main": "src/index.ts",
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts",
+		"./auth": "./src/lib/auth.ts",
+		"./package.json": "./package.json"
+	},
+	"scripts": {
+		"build": "wrangler deploy --dry-run",
+		"check-types": "tsc -b",
+		"compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
+		"db:push": "drizzle-kit push",
+		"db:studio": "drizzle-kit studio",
+		"db:generate": "drizzle-kit generate",
+		"db:migrate": "drizzle-kit migrate",
+		"dev": "bun run ./src/dev.ts --port=3000",
+		"start": "wrangler dev",
+		"deploy": "wrangler deploy",
+		"cf-typegen": "wrangler types --env-interface CloudflareBindings"
+	},
+	"dependencies": {
+		"@better-auth/expo": "^1.3.7",
+		"@hono/trpc-server": "^0.4.0",
+		"@neondatabase/serverless": "^1.0.1",
+		"@repo/db": "workspace:*",
+		"@trpc/client": "^11.5.0",
+		"@trpc/server": "^11.5.0",
+		"better-auth": "^1.3.7",
+		"dotenv": "^17.2.1",
+		"drizzle-orm": "^0.44.2",
+		"hono": "^4.8.2",
+		"ws": "^8.18.3",
+		"zod": "^4.0.2"
+	},
+	"devDependencies": {
+		"tsdown": "^0.14.1",
+		"@repo/typescript-config": "workspace:*",
+		"typescript": "^5.8.2",
+		"drizzle-kit": "^0.31.2",
+		"@types/ws": "^8.18.1",
+		"wrangler": "^4.23.0",
+		"@types/node": "^22.13.11"
+	}
+}

@@ -3,7 +3,9 @@
 	"compilerOptions": {
 		"strict": true,
 		"paths": {
-			"@/*": ["./*"]
+			"@/*": [
+				"./*"
+			]
 		}
 	},
 	"include": [
@@ -15,7 +17,7 @@
 	],
 	"references": [
 		{
-			"path": "../server"
+			"path": "../api"
 		}
 	]
 }
