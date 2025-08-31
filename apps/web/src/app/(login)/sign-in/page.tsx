@@ -9,7 +9,7 @@ export default function LoginPage() {
   const router = useRouter();
 
   return (
-    <Suspense>
+    <Suspense fallback={<div>Loading...</div>}>
       <SignInForm onSwitchToSignUp={() => router.replace("/sign-up")} />
       ;
     </Suspense>
